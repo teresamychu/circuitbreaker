@@ -3,6 +3,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"math/rand"
@@ -35,7 +36,7 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 		"circuit_state": cb.State().String(),
 	}
 
-	if err == circuitbreaker.ErrCircuitOpen {
+	if errors.Is(err, circuitbreaker.ErrCircuitOpen) {
 		w.WriteHeader(http.StatusServiceUnavailable)
 		response["error"] = "service temporarily unavailable"
 		response["message"] = "circuit breaker is open, please retry later"
