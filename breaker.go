@@ -65,11 +65,11 @@ func (cb *CircuitBreaker) Execute(request func() (any, error)) (any, error) {
 	}
 	result, err := request()
 	//process result in circuit breaker. update circuit breaker state.
-	cb.afterRequestUpdates(result, err)
+	cb.afterRequestUpdates(err)
 	return result, err
 }
 
-func (cb *CircuitBreaker) afterRequestUpdates(result any, err error) {
+func (cb *CircuitBreaker) afterRequestUpdates(err error) {
 	if err != nil {
 		//update circuit breaker with failure
 		if cb.state == HalfOpen {
